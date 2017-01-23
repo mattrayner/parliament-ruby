@@ -16,6 +16,12 @@ module Parliament
 
       @nodes.each do |node|
         type_index = types.index(node.type)
+
+      filtered_objects = Array.new(types.size, [])
+
+      @nodes.each do |node|
+        type_index = types.index(node.type)
+
         filtered_objects[type_index] << node unless type_index.nil?
       end
 
@@ -24,4 +30,8 @@ module Parliament
       end
     end
   end
+
 end
+
+end
+
