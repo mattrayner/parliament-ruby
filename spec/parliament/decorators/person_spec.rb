@@ -53,4 +53,23 @@ describe Parliament::Decorators::Person do
       end
     end
   end
+
+  describe '#as_json' do
+    before(:each) do
+      @person_nodes = objects.select { |object| object.type == 'http://id.ukpds.org/schema/Person' }
+    end
+
+    it 'only serializes the literal attributes' do
+      person_node = @person_nodes.first
+      person_node.extend(Parliament::Decorators::Person)
+      p person_node.instance_variables
+
+      result = person_node.as_json
+      expected = { 'type'     => 'http://id.ukpds.org/schema/Person',
+                   'forename' => 'Person 1 - forename',
+                   'surname'  => 'Person 1 - surname' }
+
+      expect(result).to eq(expected)
+    end
+  end
 end
