@@ -1,11 +1,8 @@
-require 'active_support/concern'
-require 'active_model/serialization'
-require 'active_model/serializers/json'
+require 'json'
 
 module Parliament
   module Decorators
     module Person
-      extend ActiveModel::Serializers
       def houses
         respond_to?(:personHasSitting) ? personHasSitting.first.sittingHasHouse : []
       end
@@ -14,8 +11,23 @@ module Parliament
         respond_to?(:personHasSitting) ? personHasSitting : []
       end
 
-      def as_json
-        super(except: ['personHasSitting', 'personHasPartyMembership', 'statements'])
+      def literals_hash
+        {
+            type: type,
+            forename: forename,
+            surname: surname
+        }
+      end
+
+      def to_hash
+        person_hash = self.literals_hash
+
+        if respond_to?(:personHasSitting)
+          sittings = personHasSitting.map { |sitting| sitting.literals_hash }
+          person_hash[:personHasSitting] = sittings
+        end
+
+        person_hash
       end
     end
   end

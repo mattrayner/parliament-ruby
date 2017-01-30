@@ -28,4 +28,21 @@ describe Parliament::Decorators::Sitting do
       end
     end
   end
+
+  describe '#literals_hash' do
+    before(:each) do
+      @sitting_nodes = objects.select { |object| object.type == 'http://id.ukpds.org/schema/Sitting' }
+    end
+
+    it 'only serializes the literal attributes' do
+      sitting_node = @sitting_nodes.first
+      sitting_node.extend(Parliament::Decorators::Sitting)
+
+      result = sitting_node.literals_hash
+      expected = { type: 'http://id.ukpds.org/schema/Sitting',
+                   sittingStartDate: '2016-05-03' }
+
+      expect(result).to eq(expected)
+    end
+  end
 end

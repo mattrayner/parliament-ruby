@@ -1,6 +1,6 @@
 require_relative '../../spec_helper'
 
-describe Parliament::Decorators::Person do
+describe Parliament::Decorators::Person, vcr: true do
   let(:data) { StringIO.new(File.read('spec/fixtures/people_members_current.nt')) }
   let(:objects) { Grom::Reader.new(data).objects }
 
@@ -54,7 +54,7 @@ describe Parliament::Decorators::Person do
     end
   end
 
-  describe '#as_json' do
+  describe '#literals_hash' do
     before(:each) do
       @person_nodes = objects.select { |object| object.type == 'http://id.ukpds.org/schema/Person' }
     end
@@ -62,12 +62,36 @@ describe Parliament::Decorators::Person do
     it 'only serializes the literal attributes' do
       person_node = @person_nodes.first
       person_node.extend(Parliament::Decorators::Person)
-      p person_node.instance_variables
 
-      result = person_node.as_json
-      expected = { 'type'     => 'http://id.ukpds.org/schema/Person',
-                   'forename' => 'Person 1 - forename',
-                   'surname'  => 'Person 1 - surname' }
+      result = person_node.literals_hash
+      expected = { type: 'http://id.ukpds.org/schema/Person',
+                   forename: 'Person 1 - forename',
+                   surname: 'Person 1 - surname' }
+
+      expect(result).to eq(expected)
+    end
+  end
+
+  describe '#to_hash' do
+    before(:each) do
+      @response = Parliament::Request.new(base_url: 'http://localhost:3030').people.members.current.get
+    end
+
+    it 'only serializes the literal attributes' do
+      person_node = @response.select { |node| node.type == 'http://id.ukpds.org/schema/Person' }.first
+
+      result = person_node.to_hash
+      expected = { type: 'http://id.ukpds.org/schema/Person',
+                   forename: 'Person 1 - forename',
+                   surname: 'Person 1 - surname',
+                   personHasSitting: [
+                       {
+                           type: 'http://id.ukpds.org/schema/Sitting',
+                           sittingStartDate: '2016-05-03'
+                       }
+                   ]
+
+      }
 
       expect(result).to eq(expected)
     end
