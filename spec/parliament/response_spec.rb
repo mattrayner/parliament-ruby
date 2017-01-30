@@ -89,4 +89,35 @@ describe Parliament::Response, vcr: true do
       expect(subject.filter('http://id.ukpds.org/schema/Person').first.size).to eq(0)
     end
   end
+
+  describe '#to_json' do
+    before(:each) do
+      @response = Parliament::Request.new(base_url: 'http://localhost:3030').people.members.current.get
+    end
+
+    it 'returns an array of hashes for each object' do
+      expected = [{ type: 'http://id.ukpds.org/schema/Person',
+                   forename: 'Person 1 - forename',
+                   surname: 'Person 1 - surname',
+                   personHasSitting: [
+                       {
+                           type: 'http://id.ukpds.org/schema/Sitting',
+                           sittingStartDate: '2016-05-03'
+                       }
+                   ]
+                  },
+                  { type: 'http://id.ukpds.org/schema/Person',
+                    forename: 'Person 2 - forename',
+                    surname: 'Person 2 - surname',
+                    personHasSitting: [
+                        {
+                            type: 'http://id.ukpds.org/schema/Sitting',
+                            sittingStartDate: '2016-05-03'
+                        }
+                    ]
+                  }]
+
+      expect(@response.to_json).to eq(expected)
+    end
+  end
 end

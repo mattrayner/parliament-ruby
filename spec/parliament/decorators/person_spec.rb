@@ -90,8 +90,7 @@ describe Parliament::Decorators::Person, vcr: true do
                            sittingStartDate: '2016-05-03'
                        }
                    ]
-
-      }
+                }
 
       expect(result).to eq(expected)
     end

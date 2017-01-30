@@ -25,5 +25,13 @@ module Parliament
         Parliament::Response.new(objects)
       end
     end
+
+    def to_json
+      @nodes.map do |node|
+        if node.respond_to?(:to_hash)
+          node.to_hash
+        end
+      end.compact
+    end
   end
 end
