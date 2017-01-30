@@ -11,12 +11,24 @@ module Parliament
         respond_to?(:personHasSitting) ? personHasSitting : []
       end
 
+      # def literals_hash
+      #   {
+      #       type: type,
+      #       forename: forename,
+      #       surname: surname
+      #   }
+      # end
+
       def literals_hash
-        {
-            type: type,
-            forename: forename,
-            surname: surname
-        }
+        hash = {}
+        instance_variables.each do |attribute|
+          value = instance_variable_get(attribute)
+          attribute = attribute.to_s.tr!('@', '').to_sym
+          unless value.is_a? Array
+            hash[attribute] = value
+          end
+        end
+        hash
       end
 
       def to_hash
