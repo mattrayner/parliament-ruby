@@ -1,3 +1,4 @@
+
 module Parliament
   module Decorators
     module Person
