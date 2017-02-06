@@ -9,6 +9,5 @@ module Parliament
       end
 
     end
-
   end
 end
