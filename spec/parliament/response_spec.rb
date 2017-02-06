@@ -47,8 +47,6 @@ describe Parliament::Response, vcr: true do
       @response = Parliament::Request.new(base_url: 'http://localhost:3030').people.members.current.get
     end
 
-<<<<<<< HEAD
-
     it 'returns an array of arrays of objects filtered by type Person' do
       filtered_response = @response.filter('http://id.ukpds.org/schema/Person', 'http://id.ukpds.org/schema/Party')
 
@@ -70,19 +68,19 @@ describe Parliament::Response, vcr: true do
       end
     end
   end
-end
+
 
     it 'returns an array of arrays of objects filtered by type' do
       filtered_response = @response.filter('http://id.ukpds.org/schema/Person', 'http://id.ukdps.org/schema/Party')
+    end
 
-=======
     it 'returns an empty array when no types are passed in' do
       filtered_response = @response.filter
 
       expect(filtered_response.size).to eq(0)
     end
 
->>>>>>> fixed pr comments
+
     it 'returns an array of arrays of objects filtered by type Person' do
       filtered_response = @response.filter('http://id.ukpds.org/schema/Person', 'http://id.ukpds.org/schema/Party')
 
@@ -115,4 +113,4 @@ end
       expect(subject.filter('http://id.ukpds.org/schema/Person').first.size).to eq(0)
     end
   end
-end
+

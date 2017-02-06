@@ -14,7 +14,7 @@ module Parliament
     def filter(*types)
       filtered_objects = Array.new(types.size) { [] }
 
-<<<<<<< HEAD
+
       @nodes.each do |node|
         type_index = types.index(node.type)
 
@@ -23,13 +23,13 @@ module Parliament
       @nodes.each do |node|
         type_index = types.index(node.type)
         filtered_objects[type_index] << node unless type_index.nil?
-=======
+
       unless types.empty?
         @nodes.each do |node|
           type_index = types.index(node.type)
           filtered_objects[type_index] << node unless type_index.nil?
         end
->>>>>>> fixed pr comments
+
       end
 
       filtered_objects.each do |objects|
