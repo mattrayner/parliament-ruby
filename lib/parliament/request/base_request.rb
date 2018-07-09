@@ -9,8 +9,8 @@ module Parliament
     # @attr_reader [String] base_url the base url of our api. (expected: http://example.com - without the trailing slash).
     # @attr_reader [Hash] headers the headers being sent in the request.
     class BaseRequest
-      TIMEOUT        = 40.freeze
-      CONNECTTIMEOUT = 5.freeze
+      TIMEOUT        = 40
+      CONNECTTIMEOUT = 5
 
       attr_reader :base_url, :headers, :query_params
       # Creates a new instance of Parliament::Request::BaseRequest.
@@ -187,10 +187,10 @@ module Parliament
       def handle_errors(response)
         exception_class = if response.success? # 2xx Status
                             Parliament::NoContentResponseError if response.headers&.[]('Content-Length') == '0' ||
-                              (response.headers&.[]('Content-Length').nil? && response.body.empty?)
-                          elsif /\A4\w{2}/.match(response.code.to_s) # 4xx Status
+                                                                  (response.headers&.[]('Content-Length').nil? && response.body.empty?)
+                          elsif /\A4\w{2}/.match?(response.code.to_s) # 4xx Status
                             Parliament::ClientError
-                          elsif /\A5\w{2}/.match(response.code.to_s) # 5xx Status
+                          elsif /\A5\w{2}/.match?(response.code.to_s) # 5xx Status
                             Parliament::ServerError
                           end
 
@@ -205,7 +205,7 @@ module Parliament
         if endpoint.query
           # Returns [ ["key", "value"], ["key", "value"] ]
           key_value_array = URI.decode_www_form(endpoint.query)
-          key_value_array.map! { |key_value_pair| [ key_value_pair[0].to_sym, key_value_pair[1] ] }
+          key_value_array.map! { |key_value_pair| [key_value_pair[0].to_sym, key_value_pair[1]] }
           temp_params = key_value_array.to_h
         end
 
@@ -219,4 +219,3 @@ module Parliament
     end
   end
 end
-
